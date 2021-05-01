@@ -165,7 +165,7 @@ class StoryItem {
   /// one passed to the `StoryView`
   factory StoryItem.inlineImage({
     required String url,
-    required Text caption,
+    required Widget caption,
     required StoryController controller,
     Key? key,
     BoxFit imageFit = BoxFit.cover,
