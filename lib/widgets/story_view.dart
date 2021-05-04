@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/story_controller.dart';
@@ -439,12 +440,10 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
 
   VerticalDragInfo? verticalDragInfo;
 
-  StoryItem? get _currentStory =>
-      widget.storyItems.firstWhere((it) => !it!.shown, orElse: () => null);
+  StoryItem? get _currentStory => widget.storyItems.firstWhereOrNull((it) => !it!.shown);
 
-  Widget get _currentView => widget.storyItems
-      .firstWhere((it) => !it!.shown, orElse: () => widget.storyItems.last)!
-      .view;
+  Widget get _currentView =>
+      widget.storyItems.firstWhere((it) => !it!.shown, orElse: () => widget.storyItems.last!)!.view;
 
   @override
   void initState() {
@@ -453,15 +452,15 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
     // All pages after the first unshown page should have their shown value as
     // false
 
-    final firstPage = widget.storyItems.firstWhere((it) {
+    final firstPage = widget.storyItems.firstWhereOrNull((it) {
       return !it!.shown;
-    }, orElse: () {
+    });
+
+    if(firstPage == null) {
       widget.storyItems.forEach((it2) {
         it2!.shown = false;
       });
-
-      return null;
-    });
+    }
 
     if (firstPage != null) {
       final lastShownPos = widget.storyItems.indexOf(firstPage);
